@@ -29,4 +29,6 @@ export 'package:image_cropper_platform_interface/image_cropper_platform_interfac
         CroppieBoundary,
         RotationAngle;
 
+export 'package:image_cropper_for_web/image_cropper_for_web.dart';
+
 export 'src/cropper.dart';

@@ -12,13 +12,10 @@ import 'package:image_cropper_platform_interface/image_cropper_platform_interfac
 import 'src/croppie/croppie_dart.dart';
 
 export 'package:image_cropper_platform_interface/image_cropper_platform_interface.dart'
-    show
-        CropAspectRatioPreset,
-        CropStyle,
-        ImageCompressFormat,
-        CropAspectRatio,
-        CroppedFile;
+    show CropAspectRatioPreset, CropStyle, ImageCompressFormat, CropAspectRatio, CroppedFile;
 export 'src/croppie/croppie_dart_base.dart' show Boundary, ViewPort;
+export 'src/cropper_dialog.dart' show CropperDialog, CustomDialogTheme;
+export 'package:flutter/material.dart' show Dialog;
 
 /// The web implementation of [ImageCropperPlatform].
 ///
@@ -131,8 +128,7 @@ class ImageCropperPlugin extends ImageCropperPlatform {
     final viewId = 'croppie-view-${DateTime.now().millisecondsSinceEpoch}';
 
     // ignore: undefined_prefixed_name
-    ui.platformViewRegistry
-        .registerViewFactory(viewId, (int viewId) => element);
+    ui.platformViewRegistry.registerViewFactory(viewId, (int viewId) => element);
 
     final cropper = HtmlElementView(
       key: UniqueKey(),
@@ -172,8 +168,7 @@ class ImageCropperPlugin extends ImageCropperPlatform {
             rotate: doRotate,
             cropperContainerWidth: cropperWidth + 50.0,
             cropperContainerHeight: cropperHeight + 50.0,
-            translations:
-                webSettings?.translations ?? const WebTranslations.en(),
+            translations: webSettings?.translations ?? const WebTranslations.en(),
           ),
         );
       }
@@ -183,8 +178,7 @@ class ImageCropperPlugin extends ImageCropperPlatform {
     } else {
       Dialog cropperDialog;
       if (webSettings.customDialogBuilder != null) {
-        cropperDialog =
-            webSettings.customDialogBuilder!(cropper, doCrop, doRotate);
+        cropperDialog = webSettings.customDialogBuilder!(cropper, doCrop, doRotate);
       } else {
         cropperDialog = Dialog(
           shape: RoundedRectangleBorder(
@@ -196,8 +190,7 @@ class ImageCropperPlugin extends ImageCropperPlatform {
             rotate: doRotate,
             cropperContainerWidth: cropperWidth + 50.0,
             cropperContainerHeight: cropperHeight + 50.0,
-            translations:
-                webSettings.translations ?? const WebTranslations.en(),
+            translations: webSettings.translations ?? const WebTranslations.en(),
           ),
         );
       }

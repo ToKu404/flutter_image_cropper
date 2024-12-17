@@ -1,6 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:image_cropper_platform_interface/image_cropper_platform_interface.dart';
 
+class CustomDialogTheme {
+  final TextStyle? titleStyle;
+  final Widget Function(VoidCallback onTap)? backButton;
+  final Widget Function(VoidCallback onTap)? submitButton;
+
+  CustomDialogTheme(
+      {required this.titleStyle,
+      required this.backButton,
+      required this.submitButton});
+}
+
 class CropperDialog extends StatelessWidget {
   final Widget cropper;
   final Future<String?> Function() crop;
@@ -8,6 +19,7 @@ class CropperDialog extends StatelessWidget {
   final double cropperContainerWidth;
   final double cropperContainerHeight;
   final WebTranslations translations;
+  final CustomDialogTheme? theme;
 
   const CropperDialog({
     Key? key,
@@ -17,6 +29,7 @@ class CropperDialog extends StatelessWidget {
     required this.cropperContainerWidth,
     required this.cropperContainerHeight,
     required this.translations,
+    this.theme,
   }) : super(key: key);
 
   @override
@@ -59,7 +72,9 @@ class CropperDialog extends StatelessWidget {
         children: [
           Text(
             translations.title,
-            style: Theme.of(context).textTheme.headlineSmall,
+            style: theme?.titleStyle != null
+                ? theme!.titleStyle
+                : Theme.of(context).textTheme.headlineSmall,
           ),
         ],
       ),
@@ -108,27 +123,34 @@ class CropperDialog extends StatelessWidget {
     return ButtonBar(
       buttonPadding: const EdgeInsets.symmetric(horizontal: 16.0),
       children: [
-        TextButton(
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
-          style: TextButton.styleFrom(
-            padding:
-                const EdgeInsets.symmetric(vertical: 12.0, horizontal: 16.0),
-          ),
-          child: Text(translations.cancelButton),
-        ),
-        ElevatedButton(
-          onPressed: () async {
-            final result = await crop();
-            Navigator.of(context).pop(result);
-          },
-          style: ElevatedButton.styleFrom(
-            padding:
-                const EdgeInsets.symmetric(vertical: 12.0, horizontal: 20.0),
-          ),
-          child: Text(translations.cropButton),
-        ),
+        theme?.backButton != null
+            ? theme!.backButton!.call(() => Navigator.of(context).pop())
+            : TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                style: TextButton.styleFrom(
+                  padding: const EdgeInsets.symmetric(
+                      vertical: 12.0, horizontal: 16.0),
+                ),
+                child: Text(translations.cancelButton),
+              ),
+        theme?.submitButton != null
+            ? theme!.submitButton!.call(() async {
+                final result = await crop();
+                Navigator.of(context).pop(result);
+              })
+            : ElevatedButton(
+                onPressed: () async {
+                  final result = await crop();
+                  Navigator.of(context).pop(result);
+                },
+                style: ElevatedButton.styleFrom(
+                  padding: const EdgeInsets.symmetric(
+                      vertical: 12.0, horizontal: 20.0),
+                ),
+                child: Text(translations.cropButton),
+              ),
       ],
     );
   }
