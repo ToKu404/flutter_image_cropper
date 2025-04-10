@@ -24,12 +24,12 @@ dependencies:
   image_cropper_platform_interface:
     git:
       url: https://github.com/ToKu404/flutter_image_cropper.git
-      ref: ebe743756366f998df96e0b1e568b86356233356
+      ref: master
       path: image_cropper_platform_interface
   image_cropper_for_web:
     git:
       url: https://github.com/ToKu404/flutter_image_cropper.git
-      ref: c0184c3a3ed034ff8c24ac25a8fd6cabbbfdb5f4 
+      ref: master 
       path: image_cropper_for_web
 
 dev_dependencies:
